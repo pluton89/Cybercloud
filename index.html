@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cybercloud - Communauté Kryptex & Mining Rigs</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter & Orbitron -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: {
+                            dark: '#0a0d14',
+                            card: 'rgba(15, 23, 42, 0.75)',
+                            cyan: '#00f0ff',
+                            purple: '#7000ff',
+                            green: '#00ff88',
+                            discord: '#5865F2'
+                        }
+                    },
+                    fontFamily: {
+                        orbitron: ['Orbitron', 'sans-serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'neon-cyan': '0 0 25px rgba(0, 240, 255, 0.4)',
+                        'neon-purple': '0 0 25px rgba(112, 0, 255, 0.4)',
+                        'neon-green': '0 0 25px rgba(0, 255, 136, 0.4)',
+                        'neon-discord': '0 0 25px rgba(88, 101, 242, 0.5)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #060911;
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+
+        /* Effet Glassmorphism */
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-panel-glow {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.1);
+        }
+
+        /* Glowing text gradient */
+        .gradient-text-cyan {
+            background: linear-gradient(135deg, #00f0ff 0%, #7000ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .gradient-text-green {
+            background: linear-gradient(135deg, #00ff88 0%, #00f0ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Animation de pulsation neon */
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.6; transform: scale(1); }
+            50% { opacity: 0.9; transform: scale(1.03); }
+        }
+
+        .animate-glow {
+            animation: pulseGlow 4s infinite ease-in-out;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #060911;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00f0ff;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased selection:bg-cyber-cyan selection:text-black">
+
+    <!-- Background Animated Canvas -->
+    <canvas id="particleCanvas" class="fixed top-0 left-0 w-full h-full pointer-events-none z-0"></canvas>
+
+    <!-- Navigation Bar -->
+    <nav class="fixed top-0 left-0 w-full z-50 glass-panel border-b border-slate-800/80 px-4 lg:px-12 py-4 flex justify-between items-center transition-all duration-300">
+        <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyber-cyan to-cyber-purple p-0.5 shadow-neon-cyan flex items-center justify-center">
+                <div class="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
+                    <i class="fa-solid font-bold fa-bolt text-cyber-cyan text-xl"></i>
+                </div>
+            </div>
+            <span class="font-orbitron font-extrabold text-xl tracking-wider text-white">CYBER<span class="text-cyber-cyan">CLOUD</span></span>
+        </div>
+
+        <!-- Navigation Links -->
+        <div class="hidden md:flex items-center space-x-8 font-medium text-sm text-slate-300">
+            <a href="#about" class="hover:text-cyber-cyan transition-colors">À Propos</a>
+            <a href="#calculator" class="hover:text-cyber-cyan transition-colors">Calculateur GPU</a>
+            <a href="#kryptex" class="hover:text-cyber-cyan transition-colors">Installer Kryptex</a>
+            <a href="#community" class="hover:text-cyber-cyan transition-colors">Communauté</a>
+        </div>
+
+        <!-- Discord Button Top Nav -->
+        <a href="https://discord.gg/huN6D5xdpc" target="_blank" rel="noopener noreferrer" class="relative group overflow-hidden px-5 py-2.5 rounded-xl bg-cyber-discord text-white font-semibold text-sm transition-all duration-300 shadow-neon-discord hover:shadow-cyan-500/50 flex items-center space-x-2">
+            <span class="relative z-10 flex items-center gap-2">
+                <i class="fa-brands fa-discord text-lg"></i>
+                <span>Rejoindre Discord</span>
+            </span>
+            <div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+        </a>
+    </nav>
+
+    <main class="relative z-10 pt-24">
+
+        <!-- Hero Section -->
+        <section id="about" class="min-h-[85vh] flex items-center justify-center px-4 relative overflow-hidden py-16">
+            <div class="absolute -top-32 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-cyber-purple/20 rounded-full blur-[140px] pointer-events-none"></div>
+            <div class="absolute top-1/2 left-1/4 w-[400px] h-[400px] bg-cyber-cyan/15 rounded-full blur-[120px] pointer-events-none"></div>
+
+            <div class="max-w-4xl mx-auto text-center space-y-8">
+                <!-- Badge -->
+                <div class="inline-flex items-center space-x-2 px-4 py-2 rounded-full glass-panel border border-cyber-cyan/30 text-xs font-semibold text-cyber-cyan uppercase tracking-widest shadow-neon-cyan">
+                    <span class="w-2 h-2 rounded-full bg-cyber-green animate-ping"></span>
+                    <span>Communauté Crypto Mining & Kryptex</span>
+                </div>
+
+                <!-- Main Heading -->
+                <h1 class="font-orbitron text-4xl sm:text-6xl md:text-7xl font-black text-white leading-tight tracking-tight">
+                    Génére Tes Gains Kryptex support sur <span class="gradient-text-cyan">Cybercloud</span>
+                </h1>
+
+                <!-- Subtitle -->
+                <p class="text-slate-300 text-base sm:text-lg md:text-xl max-w-2xl mx-auto leading-relaxed font-light">
+                    Rejoins la communauté francophone dédiée à la maximisation de tes revenus de minage. Conseils d'experts, configurations de rigs, partage de preuves de gains et entraide quotidienne.
+                </p>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+                    <a href="https://discord.gg/huN6D5xdpc" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-cyber-discord to-indigo-600 text-white font-bold text-lg shadow-neon-discord hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3 group">
+                        <i class="fa-brands fa-discord text-2xl group-hover:rotate-12 transition-transform"></i>
+                        <span>Accéder au Discord Cybercloud</span>
+                        <i class="fa-solid fa-arrow-right text-sm opacity-70 group-hover:translate-x-1 transition-transform"></i>
+                    </a>
+
+                    <a href="https://www.kryptex.com/download-v5?source=sidebar" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto px-8 py-4 rounded-xl glass-panel hover:border-cyber-cyan text-white font-semibold text-lg transition-all duration-300 flex items-center justify-center gap-3 hover:shadow-neon-cyan">
+                        <i class="fa-solid fa-download text-cyber-cyan"></i>
+                        <span>Télécharger Kryptex v5</span>
+                    </a>
+                </div>
+
+                <!-- Stats Grid (Seulement Aide & Support 24/7) -->
+                <div class="flex justify-center pt-8 max-w-xs mx-auto">
+                    <div class="w-full glass-panel p-4 rounded-2xl border-slate-800/80 hover:border-cyber-green/30 transition-all">
+                        <div class="font-orbitron text-2xl sm:text-3xl font-black text-cyber-green">24/7</div>
+                        <div class="text-xs text-slate-400 font-medium mt-1 uppercase tracking-wider">Aide & Support Rig</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Calculator Section -->
+        <section id="calculator" class="py-20 px-4 relative">
+            <div class="max-w-5xl mx-auto">
+                <div class="text-center space-y-4 mb-12">
+                    <h2 class="font-orbitron text-3xl sm:text-5xl font-extrabold text-white">
+                        Outil de Gains <span class="gradient-text-cyan">GPU Performance</span>
+                    </h2>
+                    <p class="text-slate-400 max-w-xl mx-auto">
+                        Estime les revenus mensuels approximatifs de ta carte graphique avec Kryptex.
+                    </p>
+                </div>
+
+                <!-- Calculator App Component -->
+                <div class="glass-panel-glow rounded-3xl p-6 sm:p-10 border border-cyber-cyan/30 shadow-2xl relative overflow-hidden">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+
+                        <!-- Controls -->
+                        <div class="lg:col-span-7 space-y-6">
+                            <!-- GPU Selection Dropdown -->
+                            <div>
+                                <label class="block text-xs uppercase tracking-wider text-slate-300 font-bold mb-2 flex items-center gap-2">
+                                    <i class="fa-solid fa-microchip text-cyber-cyan"></i> Modèle de Carte Graphique (GPU)
+                                </label>
+                                <select id="gpuSelect" class="w-full bg-slate-900/90 text-white border border-slate-700 rounded-xl px-4 py-3.5 focus:border-cyber-cyan focus:ring-1 focus:ring-cyber-cyan outline-none transition-all cursor-pointer font-medium">
+                                    <optgroup label="NVIDIA RTX 40 Series">
+                                        <option value="rtx4090" data-gain="145.50" data-hash="120 MH/s" data-power="280">NVIDIA RTX 4090 (~145.50 €/mois)</option>
+                                        <option value="rtx4080" data-gain="98.20" data-hash="85 MH/s" data-power="220">NVIDIA RTX 4080 (~98.20 €/mois)</option>
+                                        <option value="rtx4070ti" data-gain="72.40" data-hash="65 MH/s" data-power="180">NVIDIA RTX 4070 Ti (~72.40 €/mois)</option>
+                                        <option value="rtx4060ti" data-gain="45.10" data-hash="40 MH/s" data-power="130">NVIDIA RTX 4060 Ti (~45.10 €/mois)</option>
+                                    </optgroup>
+                                    <optgroup label="NVIDIA RTX 30 Series">
+                                        <option value="rtx3090" data-gain="88.00" data-hash="115 MH/s" data-power="300">NVIDIA RTX 3090 (~88.00 €/mois)</option>
+                                        <option value="rtx3080" data-gain="68.50" data-hash="95 MH/s" data-power="240" selected>NVIDIA RTX 3080 (~68.50 €/mois)</option>
+                                        <option value="rtx3070" data-gain="42.00" data-hash="60 MH/s" data-power="130">NVIDIA RTX 3070 (~42.00 €/mois)</option>
+                                        <option value="rtx3060ti" data-gain="35.80" data-hash="48 MH/s" data-power="120">NVIDIA RTX 3060 Ti (~35.80 €/mois)</option>
+                                    </optgroup>
+                                    <optgroup label="AMD Radeon RX Series">
+                                        <option value="rx7900xtx" data-gain="92.30" data-hash="100 MH/s" data-power="260">AMD RX 7900 XTX (~92.30 €/mois)</option>
+                                        <option value="rx6800xt" data-gain="48.70" data-hash="62 MH/s" data-power="160">AMD RX 6800 XT (~48.70 €/mois)</option>
+                                        <option value="rx6700xt" data-gain="31.20" data-hash="47 MH/s" data-power="130">AMD RX 6700 XT (~31.20 €/mois)</option>
+                                    </optgroup>
+                                </select>
+                            </div>
+
+                            <!-- GPU Count Slider -->
+                            <div>
+                                <div class="flex justify-between items-center mb-2">
+                                    <label class="text-xs uppercase tracking-wider text-slate-300 font-bold flex items-center gap-2">
+                                        <i class="fa-solid fa-server text-cyber-purple"></i> Nombre de GPU dans le Rig
+                                    </label>
+                                    <span id="gpuCountDisplay" class="font-orbitron text-cyber-cyan font-bold text-lg">1 GPU</span>
+                                </div>
+                                <input type="range" id="gpuCount" min="1" max="12" value="1" class="w-full accent-cyber-cyan h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer">
+                            </div>
+
+                            <!-- Electricity Cost Slider -->
+                            <div>
+                                <div class="flex justify-between items-center mb-2">
+                                    <label class="text-xs uppercase tracking-wider text-slate-300 font-bold flex items-center gap-2">
+                                        <i class="fa-solid fa-bolt text-cyber-green"></i> Coût Électricité par kWh (€)
+                                    </label>
+                                    <span id="elecDisplay" class="font-orbitron text-cyber-green font-bold text-lg">0.22 €</span>
+                                </div>
+                                <input type="range" id="elecCost" min="0" max="0.50" step="0.01" value="0.22" class="w-full accent-cyber-green h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer">
+                            </div>
+                        </div>
+
+                        <!-- Display Results Box -->
+                        <div class="lg:col-span-5 glass-panel p-6 sm:p-8 rounded-2xl border border-cyber-cyan/30 bg-slate-950/80 text-center relative overflow-hidden flex flex-col justify-between h-full">
+                            <div class="absolute -top-12 -right-12 w-32 h-32 bg-cyber-cyan/20 rounded-full blur-2xl"></div>
+
+                            <div class="space-y-2">
+                                <span class="text-xs font-semibold uppercase tracking-widest text-slate-400">Gains Net Estimés</span>
+                                <div class="py-2">
+                                    <span id="monthlyEarnings" class="font-orbitron text-4xl sm:text-5xl font-black gradient-text-green tracking-tight">68.50 €</span>
+                                    <span class="text-slate-400 font-medium block mt-1 text-sm">/ mois approximatifs</span>
+                                </div>
+                            </div>
+
+                            <div class="my-6 pt-6 border-t border-slate-800/80 grid grid-cols-2 gap-4 text-left">
+                                <div>
+                                    <span class="text-xs text-slate-400 block">Consommation</span>
+                                    <span id="powerUsage" class="font-orbitron text-white font-bold text-base">240 W</span>
+                                </div>
+                                <div>
+                                    <span class="text-xs text-slate-400 block">Performance Hash</span>
+                                    <span id="hashRate" class="font-orbitron text-cyber-cyan font-bold text-base">95 MH/s</span>
+                                </div>
+                                <div>
+                                    <span class="text-xs text-slate-400 block">Gains Bruts</span>
+                                    <span id="grossEarnings" class="font-orbitron text-slate-300 font-semibold text-sm">-- €</span>
+                                </div>
+                                <div>
+                                <span class="text-xs text-slate-400 block">Coût Élec / mois</span>
+                                <span id="elecTotal" class="font-orbitron text-rose-400 font-semibold text-sm">-- €</span>
+                            </div>
+                        </div>
+
+                        <a href="https://discord.gg/huN6D5xdpc" target="_blank" rel="noopener noreferrer" class="w-full py-3 rounded-xl bg-cyber-cyan/10 hover:bg-cyber-cyan/20 border border-cyber-cyan/40 text-cyber-cyan font-bold text-sm transition-all flex items-center justify-center gap-2">
+                            <i class="fa-brands fa-discord"></i>
+                            <span>Optimiser mes réglages sur Discord</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Kryptex Download & Installation Guide -->
+        <section id="kryptex" class="py-20 px-4 relative">
+            <div class="max-w-5xl mx-auto space-y-12">
+                
+                <!-- Section Header -->
+                <div class="glass-panel p-8 sm:p-12 rounded-3xl border border-cyber-purple/40 relative overflow-hidden">
+                    <div class="absolute -bottom-16 -right-16 w-64 h-64 bg-cyber-purple/20 rounded-full blur-3xl"></div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+                        <div class="md:col-span-8 space-y-4">
+                            <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-md bg-cyber-purple/20 text-cyber-purple text-xs font-bold uppercase tracking-wider">
+                                <i class="fa-solid fa-download"></i> Version Officielle Kryptex v5
+                            </div>
+                            <h2 class="font-orbitron text-3xl sm:text-4xl font-extrabold text-white">
+                                Prêt à commencer à générer des revenus ?
+                            </h2>
+                            <p class="text-slate-300 leading-relaxed text-sm sm:text-base">
+                                Kryptex est l'application simple et automatique qui transforme la puissance brute de ton PC en revenus réels. Télécharge directement la version officielle v5 via le lien ci-dessous.
+                            </p>
+                        </div>
+                        <div class="md:col-span-4 flex justify-center md:justify-end">
+                            <a href="https://www.kryptex.com/download-v5?source=sidebar" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto px-8 py-5 rounded-2xl bg-gradient-to-r from-cyber-cyan to-blue-600 text-slate-950 font-black text-lg shadow-neon-cyan hover:scale-105 transition-all text-center flex items-center justify-center gap-3">
+                                <i class="fa-solid fa-cloud-arrow-down text-2xl"></i>
+                                <span>Télécharger Kryptex v5</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step-by-Step Installation Guide -->
+                <div class="text-center space-y-4 pt-4">
+                    <h3 class="font-orbitron text-2xl sm:text-3xl font-bold text-white">Guide d'Installation Rapide</h3>
+                    <p class="text-slate-400 text-sm">3 étapes simples pour débuter l'aventure Cybercloud</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Step 1 -->
+                    <div class="glass-panel p-6 rounded-2xl border-slate-800 relative hover:border-cyber-cyan/50 transition-all duration-300 group">
+                        <div class="w-12 h-12 rounded-xl bg-cyber-cyan/10 text-cyber-cyan font-orbitron font-extrabold text-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                            01
+                        </div>
+                        <h4 class="font-orbitron font-bold text-lg text-white mb-2">Télécharge & Installe</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            Télécharge Kryptex v5 depuis le lien officiel et exécute l'installation en quelques clics sur ton ordinateur Windows.
+                        </p>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="glass-panel p-6 rounded-2xl border-slate-800 relative hover:border-cyber-purple/50 transition-all duration-300 group">
+                        <div class="w-12 h-12 rounded-xl bg-cyber-purple/10 text-cyber-purple font-orbitron font-extrabold text-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                            02
+                        </div>
+                        <h4 class="font-orbitron font-bold text-lg text-white mb-2">Lance le Benchmark</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            Kryptex va analyser ton matériel (GPU/CPU) pour sélectionner automatiquement l'algorithme le plus rentable pour ta carte.
+                        </p>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="glass-panel p-6 rounded-2xl border-slate-800 relative hover:border-cyber-green/50 transition-all duration-300 group">
+                        <div class="w-12 h-12 rounded-xl bg-cyber-green/10 text-cyber-green font-orbitron font-extrabold text-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                            03
+                        </div>
+                        <h4 class="font-orbitron font-bold text-lg text-white mb-2">Rejoins Cybercloud</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            Viens sur le Discord Cybercloud pour apprendre à overclocker ton GPU, réduire ta consommation et maximiser tes profits !
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Community Features & Benefits Section -->
+        <section id="community" class="py-20 px-4 relative">
+            <div class="max-w-6xl mx-auto space-y-12">
+                <div class="text-center space-y-4">
+                    <h2 class="font-orbitron text-3xl sm:text-5xl font-extrabold text-white">
+                        Pourquoi Rejoindre <span class="gradient-text-cyan">Cybercloud ?</span>
+                    </h2>
+                    <p class="text-slate-400 max-w-2xl mx-auto text-sm sm:text-base">
+                        Une communauté active et passionnée prête à t'accompagner dans la création et l'optimisation de ton infrastructure de minage.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Card 1: Partage de Gains -->
+                    <div class="glass-panel p-8 rounded-3xl border-slate-800 hover:border-cyber-cyan/40 transition-all duration-300 space-y-4">
+                        <div class="w-14 h-14 rounded-2xl bg-cyber-cyan/10 text-cyber-cyan flex items-center justify-center text-2xl shadow-neon-cyan">
+                            <i class="fa-solid fa-wallet"></i>
+                        </div>
+                        <h3 class="font-orbitron font-bold text-xl text-white">Partage de Gains & Preuves</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            Consulte les canaux dédiés où les membres partagent quotidiennement leurs résultats réels, paiements Kryptex et bilans mensuels.
+                        </p>
+                    </div>
+
+                    <!-- Card 2: Aide Rigs -->
+                    <div class="glass-panel p-8 rounded-3xl border-slate-800 hover:border-cyber-purple/40 transition-all duration-300 space-y-4">
+                        <div class="w-14 h-14 rounded-2xl bg-cyber-purple/10 text-cyber-purple flex items-center justify-center text-2xl shadow-neon-purple">
+                            <i class="fa-solid fa-gears"></i>
+                        </div>
+                        <h3 class="font-orbitron font-bold text-xl text-white">Construction de Rigs</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            Besoin d'aide pour choisir tes composants, cartes mères, alimentations ou risers ? Nos experts te guident pas à pas dans le montage de tes rigs.
+                        </p>
+                    </div>
+
+                    <!-- Card 3: Communaute Active -->
+                    <div class="glass-panel p-8 rounded-3xl border-slate-800 hover:border-cyber-green/40 transition-all duration-300 space-y-4">
+                        <div class="w-14 h-14 rounded-2xl bg-cyber-green/10 text-cyber-green flex items-center justify-center text-2xl shadow-neon-green">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                        <h3 class="font-orbitron font-bold text-xl text-white">Entraide Communautaire</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            Résolution de bugs, soucis de drivers, surchauffe GPU ou réglages MSI Afterburner : trouve des réponses rapides 24/7 sur notre serveur.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Call To Action Box -->
+                <div class="glass-panel p-8 sm:p-12 rounded-3xl border border-cyber-discord/40 bg-gradient-to-r from-slate-950 via-slate-900 to-indigo-950/40 text-center space-y-6 relative overflow-hidden">
+                    <div class="space-y-3">
+                        <h3 class="font-orbitron text-2xl sm:text-4xl font-extrabold text-white">Prêt à Générer tes Premiers Revenus ?</h3>
+                        <p class="text-slate-300 max-w-xl mx-auto text-sm sm:text-base">
+                            Ne reste pas seul face aux réglages complexes. Rejoins les passionnés du serveur Cybercloud dès aujourd'hui !
+                        </p>
+                    </div>
+                    <div class="pt-2">
+                        <a href="https://discord.gg/huN6D5xdpc" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-3 px-8 py-4 rounded-xl bg-cyber-discord hover:bg-indigo-600 text-white font-bold text-lg shadow-neon-discord hover:scale-105 transition-all">
+                            <i class="fa-brands fa-discord text-2xl"></i>
+                            <span>Rejoindre le Discord Cybercloud</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800/80 glass-panel py-8 px-4 text-center text-slate-500 text-xs font-medium">
+        <div class="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center space-x-2">
+                <span class="font-orbitron font-bold text-white tracking-wider">CYBER<span class="text-cyber-cyan">CLOUD</span></span>
+                <span>- Communauté d'aide Kryptex & Mining</span>
+            </div>
+            <p> † ۸ѕтЯ๐•ോ © 2026</p>
+        </div>
+    </footer>
+
+    <!-- Interactive Canvas Particles Script & Profitability Calculator Script -->
+    <script>
+        // === PARTICLE CANVAS ANIMATION ===
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let particlesArray = [];
+        const numberOfParticles = 45;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 1;
+                this.speedX = (Math.random() - 0.5) * 0.5;
+                this.speedY = (Math.random() - 0.5) * 0.5;
+                this.color = Math.random() > 0.5 ? '#00f0ff' : '#7000ff';
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particlesArray = [];
+            for (let i = 0; i < numberOfParticles; i++) {
+                particlesArray.push(new Particle());
+            }
+        }
+        initParticles();
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+                particlesArray[i].draw();
+
+                for (let j = i; j < particlesArray.length; j++) {
+                    const dx = particlesArray[i].x - particlesArray[j].x;
+                    const dy = particlesArray[i].y - particlesArray[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < 120) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = particlesArray[i].color;
+                        ctx.globalAlpha = 1 - (distance / 120);
+                        ctx.lineWidth = 0.5;
+                        ctx.moveTo(particlesArray[i].x, particlesArray[i].y);
+                        ctx.lineTo(particlesArray[j].x, particlesArray[j].y);
+                        ctx.stroke();
+                        ctx.globalAlpha = 1;
+                    }
+                }
+            }
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // === GPU CALCULATOR LOGIC ===
+        const gpuSelect = document.getElementById('gpuSelect');
+        const gpuCountInput = document.getElementById('gpuCount');
+        const gpuCountDisplay = document.getElementById('gpuCountDisplay');
+        const elecCostInput = document.getElementById('elecCost');
+        const elecDisplay = document.getElementById('elecDisplay');
+
+        const monthlyEarningsDisplay = document.getElementById('monthlyEarnings');
+        const powerUsageDisplay = document.getElementById('powerUsage');
+        const hashRateDisplay = document.getElementById('hashRate');
+        const grossEarningsDisplay = document.getElementById('grossEarnings');
+        const elecTotalDisplay = document.getElementById('elecTotal');
+
+        function calculateProfits() {
+            const selectedOption = gpuSelect.options[gpuSelect.selectedIndex];
+            const baseGainPerGpu = parseFloat(selectedOption.getAttribute('data-gain'));
+            const powerPerGpu = parseFloat(selectedOption.getAttribute('data-power'));
+            const baseHash = selectedOption.getAttribute('data-hash');
+
+            const count = parseInt(gpuCountInput.value);
+            const kwhPrice = parseFloat(elecCostInput.value);
+
+            // Displays
+            gpuCountDisplay.textContent = `${count} GPU${count > 1 ? 's' : ''}`;
+            elecDisplay.textContent = `${kwhPrice.toFixed(2)} €`;
+
+            // Hash & Power total
+            const totalPowerWatts = powerPerGpu * count;
+            const hashValue = parseInt(baseHash) * count;
+            const hashUnit = baseHash.replace(/[0-9]/g, '').trim();
+
+            powerUsageDisplay.textContent = `${totalPowerWatts} W`;
+            hashRateDisplay.textContent = `${hashValue} ${hashUnit}`;
+
+            // Electricity cost calculation per month: (Watts * 24h * 30.5 days / 1000) * kWh price
+            const monthlyKwh = (totalPowerWatts * 24 * 30.5) / 1000;
+            const monthlyElecCost = monthlyKwh * kwhPrice;
+
+            // Gross & Net Earnings
+            const grossEarnings = baseGainPerGpu * count;
+            const netEarnings = grossEarnings - monthlyElecCost;
+
+            grossEarningsDisplay.textContent = `${grossEarnings.toFixed(2)} €`;
+            elecTotalDisplay.textContent = `- ${monthlyElecCost.toFixed(2)} €`;
+            
+            if (netEarnings > 0) {
+                monthlyEarningsDisplay.textContent = `${netEarnings.toFixed(2)} €`;
+                monthlyEarningsDisplay.className = "font-orbitron text-4xl sm:text-5xl font-black gradient-text-green tracking-tight";
+            } else {
+                monthlyEarningsDisplay.textContent = `${netEarnings.toFixed(2)} €`;
+                monthlyEarningsDisplay.className = "font-orbitron text-4xl sm:text-5xl font-black text-rose-500 tracking-tight";
+            }
+        }
+
+        gpuSelect.addEventListener('change', calculateProfits);
+        gpuCountInput.addEventListener('input', calculateProfits);
+        elecCostInput.addEventListener('input', calculateProfits);
+
+        // Initial Calculation
+        calculateProfits();
+    </script>
+</body>
+</html>
